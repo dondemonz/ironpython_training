@@ -19,15 +19,15 @@ from System.Windows.Automation import *
 
 def get_group_list(main_window):
     modal = open_group_editor(main_window)
-    tree = modal.Get(SearchCriteria.ByAutomationId("uxAddressTreeView")).Click()
+    tree = modal.Get(SearchCriteria.ByAutomationId("uxAddressTreeView"))
     root = tree.Nodes[0]
     # list compehantion
-    l = [node.Text for node in root.Notes]
+    l = [node.Text for node in root.Nodes]
     close_group_editor(modal)
     return l
 
 
-def test_something():
+def test_add_group():
     application = Application.Launch("C:\\devel\\FreeAddressBookPortable\\AddressBook.exe")
     main_window = application.GetWindow("Free Address Book")
     old_list = get_group_list(main_window)
@@ -38,12 +38,36 @@ def test_something():
     main_window.Get(SearchCriteria.ByAutomationId("uxExitAddressButton")).Click()
 
 
+def test_delete_group():
+    application = Application.Launch("C:\\devel\\FreeAddressBookPortable\\AddressBook.exe")
+    main_window = application.GetWindow("Free Address Book")
+    old_list = get_group_list(main_window)
+    delete_first_group(main_window)
+    new_list = get_group_list(main_window)
+    old_list.remove("Test group")
+    assert sorted(old_list) == sorted(new_list)
+    main_window.Get(SearchCriteria.ByAutomationId("uxExitAddressButton")).Click()
+
+
+def delete_first_group(main_window):
+    main_window.Get(SearchCriteria.ByAutomationId("groupButton")).Click()
+    modal = main_window.ModalWindow("Group editor")
+    tree = modal.Get(SearchCriteria.ByAutomationId("uxAddressTreeView"))
+    root = tree.Nodes[0]
+    item = root.Nodes[0]
+    item.Select()
+    modal.Get(SearchCriteria.ByAutomationId("uxDeleteAddressButton")).Click()
+    delete_window = main_window.ModalWindow("Delete group")
+    delete_window.Get(SearchCriteria.ByAutomationId("uxOKAddressButton")).Click()
+    close_group_editor(modal)
+
 def add_new_group(main_window, name):
     modal = open_group_editor(main_window)
     modal.Get(SearchCriteria.ByAutomationId("uxNewAddressButton")).Click()
     modal.Get(SearchCriteria.ByControlType(ControlType.Edit)).Enter(name)
     Keyboard.Instance.PressSpecialKey(KeyboardInput.SpecialKeys.RETURN)
     close_group_editor(modal)
+
 
 
 def close_group_editor(modal):

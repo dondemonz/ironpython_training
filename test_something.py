@@ -41,6 +41,8 @@ def test_add_group():
 def test_delete_group():
     application = Application.Launch("C:\\devel\\FreeAddressBookPortable\\AddressBook.exe")
     main_window = application.GetWindow("Free Address Book")
+    if len(get_group_list(main_window)) == 1:
+        add_new_group(main_window, "Test group")
     old_list = get_group_list(main_window)
     delete_first_group(main_window)
     new_list = get_group_list(main_window)
@@ -57,7 +59,7 @@ def delete_first_group(main_window):
     item = root.Nodes[0]
     item.Select()
     modal.Get(SearchCriteria.ByAutomationId("uxDeleteAddressButton")).Click()
-    delete_window = main_window.ModalWindow("Delete group")
+    delete_window = modal.ModalWindow("Delete group")
     delete_window.Get(SearchCriteria.ByAutomationId("uxOKAddressButton")).Click()
     close_group_editor(modal)
 

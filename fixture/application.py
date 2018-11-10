@@ -18,8 +18,8 @@ from System.Windows.Automation import *
 
 class My_application:
 
-    def __init__(self):
-        self.app = self
+    def __init__(self, app):
+        app = self.open_app()
 
     def get_group_list(self, main_window):
         modal = self.open_group_editor(main_window)
@@ -65,5 +65,5 @@ class My_application:
         modal = main_window.ModalWindow("Group editor")
         return modal
 
-    def destroy(self):
-        self.app.destroy()
+    def destroy(app):
+        app.destroy()

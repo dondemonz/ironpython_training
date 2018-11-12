@@ -16,11 +16,11 @@ def test_add_group(app, group_name="Test group"):
     new_list = app.group.get_group_list(main_window)
     old_list.append(group_name)
     assert sorted(old_list) == sorted(new_list)
-    app.session.close_app(main_window)
+    app.destroy(main_window)
 
 
 def test_delete_group(app, group_name="Test group"):
-    main_window = app.session.open_app()
+    main_window = app.open_app()
     if len(app.group.get_group_list(main_window)) == 1:
         app.group.add_new_group(main_window, "%s" % group_name)
     old_list = app.group.get_group_list(main_window)
@@ -28,7 +28,7 @@ def test_delete_group(app, group_name="Test group"):
     new_list = app.group.get_group_list(main_window)
     old_list.remove(group_name)
     assert sorted(old_list) == sorted(new_list)
-    app.session.close_app(main_window)
+    app.destroy(main_window)
 
 
 

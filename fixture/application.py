@@ -18,8 +18,9 @@ from TestStack.White import Application
 class My_application:
 
     def __init__(self):
-        self.app = self
+        # self.app = self
         self.group = GroupHelper(self)
+
 
 
     def open_app(self):
@@ -29,7 +30,6 @@ class My_application:
 
     def destroy(self, main_window):
         main_window.Get(SearchCriteria.ByAutomationId("uxExitAddressButton")).Click()
-
 
 
 
